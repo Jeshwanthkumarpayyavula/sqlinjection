@@ -31,7 +31,8 @@ Use the above ip address to access the apache webserver of Metasploitable2 from 
 
 Select Multidae from the menu listed as shown above. You will get the page as displayed below:
 
-![244885516-65d72597-0297-485a-8c57-d335bf885ba6](https://github.com/user-attachments/assets/a93e345d-b517-49c4-a7b4-3107cc2391dd)
+![image](https://github.com/user-attachments/assets/9629b4ee-9f87-4020-bee0-9ee9266fcc97)
+
 
 Click on the menu Login/Register and register for an account
 
@@ -43,7 +44,8 @@ Click on the link “Please register here”
 
 Click on “Create Account” to display the following page:
 
-![244885637-499aca4d-391b-4f0e-ac33-31ace3337955](https://github.com/user-attachments/assets/7a3bbb1a-6594-440c-9adb-5ed5a34acc66)
+![image](https://github.com/user-attachments/assets/7ba24538-e5fb-4552-9248-37c8b9ca0000)
+
 
 The login structure we will use in our examples is straightforward. It contains two input fields (username and password), which are both vulnerable. The back-end content creates a query to approve the username and secret key given by the client. Here is an outline of the page rationale:
 
@@ -61,11 +63,13 @@ The username field is vulnerable. Put (ganesh’ #) or (ganesh’--) in the user
 
 Now after logging out you will see the login page. In the login page give ganesh’ # . You can see the page now enters into the administrator page as before when giving the password.
 
-![440108148-23d4d049-960e-4b14-911f-4fc6caea8514](https://github.com/user-attachments/assets/401636a1-bc72-4c22-9747-db264efb639c)
+![image](https://github.com/user-attachments/assets/ff772fa4-a535-460e-b044-23ef5a4edc21)
+
 
 Click the login button and you will see it enter into the administrator page.
 
-![244885664-ac33b189-494b-4a5f-bce2-b840ab35e5fc](https://github.com/user-attachments/assets/267aa768-a19a-4548-b0ce-ce3624ae51eb)
+![image](https://github.com/user-attachments/assets/c71cdd84-42cf-4140-82ce-2fc4bfc09a52)
+
 
 ## Union-based SQL injection
 
@@ -95,19 +99,23 @@ When we ordered by 5, it worked and displayed some information. It means there a
 
 As it is having 5 columns the query worked fine and it provides the correct result
 
-![244885850-7a660480-5cb6-4d86-acd1-08f7a4d5e2fa](https://github.com/user-attachments/assets/54dec713-c6be-4915-9ca3-9815bdb3b41e)
+![image](https://github.com/user-attachments/assets/bd70904a-da93-418e-bd40-4c2a6a6eef81)
+
 
 Instead of using the "order by" option, let’s use the "union select" option and provide all five columns. Ex: (union select 1,2,3,4,5)
-![244885874-1c7ac260-3410-4f75-8091-2cda6b7f20c0](https://github.com/user-attachments/assets/63a4ed22-bdbd-4e30-8ecf-b3cbcf9f70cf)
+![image](https://github.com/user-attachments/assets/b9542832-630b-4eb0-b2f5-e452740c28ef)
+
 
 As given in the screenshot below columns 2,3,4 are usable in which we can substitute any sql commands to extract necessary information.
 
-![244885894-12ebac90-8efb-4558-a442-541029220fa3](https://github.com/user-attachments/assets/b6404608-a273-4801-b458-d2fe1e7ec990)
+![image](https://github.com/user-attachments/assets/d012c147-ce00-4866-80e6-d5804b5b0a59)
+
 
 Now we will substitute some few commands like database(), user(), version() to obtain the information regarding the database name, username and version of the database.
 
 http://192.168.43.145/mutillidae/index.php?page=user-info.php&username=praveen%27union%20select%201,database(),user(),version(),5%23&password=&user-info-php-submit-button=View+Account+Details
-![244885896-78ba6fc7-7ab6-4c39-8a7f-c8e4240775b8](https://github.com/user-attachments/assets/ed789352-33ef-4eff-a090-2a001dd022ee)
+![image](https://github.com/user-attachments/assets/2bb4b680-8d81-4acb-995a-80b6f90f0d48)
+
 
 The url when executed, we obtain the necessary information about the database name owasp10, username as root@localhost and version as 5.0.51a-3ubuntu5. In MySQL, the table “information_schema.tables” contains all the metadata identified with table items. Below is listed the most useful information on this table.
 
@@ -127,13 +135,15 @@ Ex: (union select 1,colunm_name,null,null,5 from information_schema.columns wher
 
 Here we are trying to extract column names from the “accounts” table.
 
-![244885902-c820f87a-30cb-485b-b423-f6fd0e67c96e](https://github.com/user-attachments/assets/74b6e9df-1e69-4d95-90e1-1694db7f5fbe)
+
+![image](https://github.com/user-attachments/assets/9d2d0ae4-f6bf-4f60-ac35-3dee6db0b65f)
+
+
 
 The column names of the accounts is displayed below for the following url:
 
 http://192.168.43.145/mutillidae/index.php?page=user-info.php&username=praveen%27union%20select%201,column_name,null,null,5%20from%20information_schema.columns%20where%20table_name=%27accounts%27%23&password=&user-info-php-submit-button=View+Account+Details
-
-![244885902-c820f87a-30cb-485b-b423-f6fd0e67c96e](https://github.com/user-attachments/assets/a0581171-e4e5-46ee-84ea-1a1d6410733e)
+![image](https://github.com/user-attachments/assets/8955c1f0-ed4b-4080-a662-432f30ca1320)
 
 Once we discovered all available column names, we can extract information from them by just adding those column names in our query sentence.
 
@@ -141,7 +151,8 @@ Ex: (union select 1,username,password,is_admin,5 from accounts).
 
 http://192.168.1.9/mutillidae/index.php?page=user-info.php&username=praveen%27union%20select%201,username,password,is_admin,5%20from%20accounts%23&password=&user-info-php-submit-button=View+Account+Details
 
-![244885903-f7dd79fb-c11c-41f3-8019-06685e9cd759](https://github.com/user-attachments/assets/f3fc6630-f371-45cc-a7f8-8cb78a436155)
+![image](https://github.com/user-attachments/assets/dfcfb6c2-de0b-47ae-965e-11220bbe8118)
+
 
 ## Reading and writing files on the web-server
 
@@ -151,8 +162,7 @@ Ex: (union select null,load_file(‘/etc/passwd’),null,null,null).
 
 http://192.168.1.9/mutillidae/index.php?page=user-info.php&username=praveen%27union%20select%20null,load_file(%27/etc/passwd%27),null,null,null%23&password=&user-info-php-submit-button=View+Account+Details
 
-![244885909-13f4a113-06fc-4d62-a8ec-6525c4ec1343](https://github.com/user-attachments/assets/84c15fba-e4fe-413c-a282-ba6c3ec00655)
-
+![image](https://github.com/user-attachments/assets/21bd7f13-3e7f-4da2-bce9-76f807347237)
 the “INTO_OUTFILE()” operator for all that they offer and attempt to root the objective server by transferring a shell-code through SQL infusion. we will write a “Hello World!” sentence and output it in the “/tmp/” directory as a “hello.txt” file. This “Hello World!” sentence can be substituted with any PHP shell-code that you want to execute in the target server. Ex: (union select null,’Hello World!’,null,null,null into outfile ‘/tmp/hello.txt’).
 
 ## RESULT:
